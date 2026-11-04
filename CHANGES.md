@@ -220,7 +220,7 @@ reviewes cruzadas de los CA de la consigna mientras A avanza por el camino crít
 ---
 
 ### [C-06] `mascotas-practicas-crud`
-- **Estado**: `[ ]` pendiente
+- **Estado**: `[x]` archivado (2026-11-04) — `openspec/changes/archive/2026-11-04-c-06-mascotas-practicas-crud/`
 - **Scope**: Módulos `mascotas` y `practicas` (agregación dueño→mascota + catálogo de prácticas)
   - `app/modules/mascotas/{models,schemas,service,router}.py`: `POST /mascotas/` con `MascotaCreate` que trae `duenio_id` existente (en la **agregación viaja un id**); dueño inexistente → FK violada → `IntegrityError` → 409 y no queda nada (caso C-04); 201 + `MascotaRead` (US-204 CA-1)
   - `GET /mascotas/` → envoltorio de la sección 2.9 `{ items, total, page, size, pages }`; `size` default 20, rango 1..100; página más allá de `pages` → 422 (cálculo del service, IN-01); la primera página siempre responde aunque no haya resultados (US-204 CA-2)
@@ -242,7 +242,7 @@ reviewes cruzadas de los CA de la consigna mientras A avanza por el camino crít
 ## FASE 3 — Altas con relaciones y lecturas sin N+1 (Épicas 4 y 5 · Ejercicios 4 y 5 — 15 % + 15 %)
 
 ### [C-07] `turnos-alta-borrado`
-- **Estado**: `[ ]` pendiente
+- **Estado**: `[x]` archivado (2026-11-04) — `openspec/changes/archive/2026-11-04-c-07-turnos-alta-borrado/`
 - **Scope**: Módulo `turnos` — el flujo central: alta con composición M:N con datos, todo-o-nada y precios congelados
   - `app/modules/turnos/{models,schemas,service,router}.py` (TurnoPractica vive acá): DTOs `TurnoCreate` con `practicas: [{practica_id}, ...]` anidadas — **ni precios ni total viajan en el DTO** (RN-06); `TurnoRead` con `mascota` embebida y prácticas con `precio_unitario` copiado
   - `POST /turnos/` en **una sola transacción** (RN-TX-01): trae precios del catálogo por cada `practica_id`, inserta `turno`, inserta cada `turno_practica` con `precio_unitario` copiado (freeze, RN-DS-02), calcula `total` el servidor
@@ -262,7 +262,7 @@ reviewes cruzadas de los CA de la consigna mientras A avanza por el camino crít
 ---
 
 ### [C-08] `lecturas-sin-n1`
-- **Estado**: `[ ]` pendiente
+- **Estado**: `[x]` archivado (2026-11-04) — `openspec/changes/archive/2026-11-04-c-08-lecturas-sin-n1/`
 - **Scope**: Precarga transversal (Épica 5): toda lectura con relaciones resuelve con carga anticipada declarada
   - Auditoría/ajuste de TODAS las lecturas con relaciones: `joinedload` para «a uno» (mascota→dueño, turno→mascota, dueño→ficha), `selectinload` para colecciones (dueño→mascotas, turno→turno_practica+practicas) (US-501 CA-1)
   - `GET /turnos/{id}` → turno con mascota y prácticas: exactamente 2 consultas fijas (1 joinedload + 1 selectinload), que NO crecen con la cantidad de prácticas (US-501 CA-2, caso C-07)
@@ -284,7 +284,7 @@ reviewes cruzadas de los CA de la consigna mientras A avanza por el camino crít
 ## FASE 4 — Asincronía sin bloqueos (Épica 6 · Ejercicio 6 — 10 %)
 
 ### [C-09] `laboratorio-offload`
-- **Estado**: `[ ]` pendiente
+- **Estado**: `[x]` archivado (2026-11-04) — `openspec/changes/archive/2026-11-04-c-09-laboratorio-offload/`
 - **Scope**: Módulo `laboratorio` — biblioteca sincrónica llamada fuera del bucle de eventos
   - `app/modules/laboratorio/cliente.py` con `consultar_stock(vacuna)` sincrónica (`time.sleep(1)`) tal como la entrega la cátedra — **usarla sin modificarla** (US-601 CA-1; si la cátedra no la entrega, reimplementarla con el código exacto del PDF — SU-05); módulo sin `models.py` (no hay persistencia — IN-02), schemas inline
   - `app/modules/laboratorio/{service,router}.py`: `GET /laboratorio/stock/{vacuna}` → `{"vacuna": ..., "stock": ...}` 200, ejecutando la función bloqueante **fuera del event loop** (offload a hilo — mecanismo exacto a fijar en el propose: `anyio.to_thread.run_sync` o `ThreadPoolExecutor`, QA-03/DD-07)
