@@ -305,7 +305,7 @@ reviewes cruzadas de los CA de la consigna mientras A avanza por el camino crít
 ## FASE 5 — Casos de prueba mínimos y entrega (Épicas 7 y 8)
 
 ### [C-10] `test-cases`
-- **Estado**: `[ ]` pendiente
+- **Estado**: `[x]` archivado (2026-11-04) — `openspec/changes/archive/2026-11-04-c-10-test-cases/`
 - **Scope**: Carpeta `test/` con los 9 casos mínimos demostrando RN-01..RN-09, integridad y asincronía
   - `test/*.http` (uno por caso o concatenados — QA-04), cada uno con comentario de la respuesta esperada, corribles después de `python reiniciar.py` (US-701)
   - C-01: `/duenios/abc` → 422 sin ejecutar el handler · C-02: email o nombre de práctica repetido → 409 con mensaje propio · C-03: segunda ficha → 409 · C-04: mascota con dueño inexistente y turno con práctica inexistente → 409 sin quedarse nada guardado · C-05: borrar dueño con mascotas → 409; borrar turno → 204 y sus prácticas ya no están · C-06: turno válido con 2 prácticas → 201 con precios copiados y total calculado · C-07: detalle de turno con 1 y con 3 prácticas → misma cantidad de consultas (`echo=True`) · C-09: 3 consultas simultáneas al laboratorio + `GET /health/live` de inmediato

@@ -1,0 +1,21 @@
+### C-02a — Email de dueño repetido
+# Esperado: 409 con mensaje propio ("El email ya está registrado").
+# Garante: UNIQUE en duenio.email + IntegrityError → 409 (RN-01, RN-INT-01). "laura@example.com" ya existe en el seed.
+POST http://localhost:8000/duenios/
+Content-Type: application/json
+
+{
+  "nombre": "Otra Laura",
+  "email": "laura@example.com"
+}
+
+### C-02b — Nombre de práctica repetido
+# Esperado: 409 con mensaje propio ("El nombre de la práctica ya existe").
+# Garante: UNIQUE en practica.nombre + IntegrityError → 409 (RN-02, RN-INT-01). "Consulta" ya existe en el seed.
+POST http://localhost:8000/practicas/
+Content-Type: application/json
+
+{
+  "nombre": "Consulta",
+  "precio": "1000.00"
+}

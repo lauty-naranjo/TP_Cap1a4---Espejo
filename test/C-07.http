@@ -1,0 +1,49 @@
+### C-07 — Detalle de turno: 1 práctica vs 3 prácticas (consultas fijas)
+# Requiere el servidor con el log de SQL activado para ver las consultas en la consola:
+#   PowerShell: $env:SQL_ECHO="true"; uvicorn app.main:app --reload
+#   bash:       SQL_ECHO=true uvicorn app.main:app --reload
+#
+# Esperado: AMBOS detalles emiten la MISMA cantidad de consultas (2), sin importar la cantidad de prácticas:
+#   1) SELECT turno LEFT JOIN mascota                                   (joinedload «a uno»)
+#   2) SELECT turno_practica LEFT JOIN practica WHERE turno_id IN (...)  (selectinload de la colección)
+# El número NO crece con las prácticas → no hay N+1 (caso C-07, RN-REL-03).
+#
+# (Sintaxis de variables: VS Code REST Client. En IntelliJ HTTP Client, reemplazá {{...}} por los ids
+#  devueltos en cada POST.)
+
+# @name turnoConUna
+POST http://localhost:8000/turnos/
+Content-Type: application/json
+
+{
+  "mascota_id": 1,
+  "fecha": "2026-11-13T09:00:00-03:00",
+  "motivo": "C-07 con 1 práctica",
+  "practicas": [
+    { "practica_id": 1 }
+  ]
+}
+
+###
+# @name turnoConTres
+POST http://localhost:8000/turnos/
+Content-Type: application/json
+
+{
+  "mascota_id": 1,
+  "fecha": "2026-11-13T10:00:00-03:00",
+  "motivo": "C-07 con 3 prácticas",
+  "practicas": [
+    { "practica_id": 1 },
+    { "practica_id": 2 },
+    { "practica_id": 3 }
+  ]
+}
+
+###
+# Detalle con 1 práctica → en la consola se ven 2 consultas. Esperado: 200.
+GET http://localhost:8000/turnos/{{turnoConUna.response.body.$.id}}
+
+###
+# Detalle con 3 prácticas → en la consola se ven las MISMAS 2 consultas. Esperado: 200.
+GET http://localhost:8000/turnos/{{turnoConTres.response.body.$.id}}

@@ -1,0 +1,3 @@
+### C-01 — Parámetro de ruta que no es entero
+# Esperado: 422 (FastAPI valida el path param `int` ANTES de ejecutar el handler).
+GET http://localhost:8000/duenios/abc

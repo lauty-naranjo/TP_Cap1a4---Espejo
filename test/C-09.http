@@ -1,0 +1,21 @@
+### C-09 — Consultas al laboratorio + GET /health/live
+# Esperado: las consultas al laboratorio tardan ~1 s cada una (función sincrónica de la cátedra),
+# pero el servidor NO se bloquea: GET /health/live responde 200 de inmediato aunque haya varias
+# consultas en marcha (RN-AS-02, DD-07).
+#
+# Cómo demostrar la simultaneidad (los clientes .http mandan secuencial): abrí este archivo en varias
+# pestañas/ejecuciones en paralelo, o corré la prueba programática del repo:
+#   .venv\Scripts\python.exe -m pytest test/test_laboratorio.py::test_offload_paraleliza_tres_consultas -v
+# (verifica que 3 consultas de 1 s corren en paralelo ≈1 s, no en serie ≈3 s).
+
+### Consulta 1 al laboratorio — Esperado: 200 {"vacuna": "...", "stock": ...}
+GET http://localhost:8000/laboratorio/stock/antirrabica
+
+### Consulta 2 al laboratorio — Esperado: 200
+GET http://localhost:8000/laboratorio/stock/parvovirus
+
+### Consulta 3 al laboratorio — Esperado: 200
+GET http://localhost:8000/laboratorio/stock/rabia
+
+### Health check durante las consultas — Esperado: 200 {"estado": "vivo"} INMEDIATO
+GET http://localhost:8000/health/live

@@ -1,0 +1,27 @@
+### C-04a — Mascota con dueño inexistente
+# Esperado: 409 ("El dueño no existe").
+# Garante: FK mascota.duenio_id violada → IntegrityError → rollback → 409 (RN-INT-01). No queda guardada.
+POST http://localhost:8000/mascotas/
+Content-Type: application/json
+
+{
+  "nombre": "Fantasma",
+  "especie": "perro",
+  "duenio_id": 9999
+}
+
+### C-04b — Turno con una práctica inexistente
+# Esperado: 409 ("Una o más prácticas no existen").
+# Garante: todo-o-nada (RN-TX-01): NO queda guardado el turno ni ninguna de sus prácticas.
+POST http://localhost:8000/turnos/
+Content-Type: application/json
+
+{
+  "mascota_id": 1,
+  "fecha": "2026-11-12T10:30:00-03:00",
+  "motivo": "Caso C-04",
+  "practicas": [
+    { "practica_id": 1 },
+    { "practica_id": 9999 }
+  ]
+}

@@ -1,0 +1,13 @@
+### C-05a — Borrar un dueño que tiene mascotas
+# Esperado: 409 ("No se puede borrar: el dueño tiene mascotas").
+# Garante: FK mascota.duenio_id ON DELETE RESTRICT + IntegrityError → 409 (RN-08). Carlos (id=2) tiene a Lola.
+DELETE http://localhost:8000/duenios/2
+
+### C-05b — Borrar un turno (sus prácticas se borran por CASCADE)
+# Esperado: 204 (sin cuerpo).
+# Garante: ON DELETE CASCADE en turno_practica.turno_id (RN-09); el ORM no las toca (passive_deletes).
+DELETE http://localhost:8000/turnos/1
+
+### C-05c — El turno borrado ya no existe
+# Esperado: 404 ("Turno no encontrado"). Confirma que el turno y sus turno_practica desaparecieron.
+GET http://localhost:8000/turnos/1

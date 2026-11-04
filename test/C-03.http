@@ -1,0 +1,10 @@
+### C-03 — Segunda ficha para el mismo dueño
+# Esperado: 409 ("El dueño ya tiene una ficha").
+# Garante: UNIQUE en ficha_duenio.duenio_id (RN-03). Laura (id=1) ya tiene ficha en el seed.
+POST http://localhost:8000/duenios/1/ficha
+Content-Type: application/json
+
+{
+  "telefono": "000-0000000",
+  "direccion": "Otra dirección"
+}
