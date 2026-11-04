@@ -117,7 +117,7 @@ reviewes cruzadas de los CA de la consigna mientras A avanza por el camino crít
 ## FASE 0 — Infraestructura y ciclo de vida (Épica 1 · Ejercicio 1 — 10 %)
 
 ### [C-01] `foundation-setup`
-- **Estado**: `[ ]` pendiente
+- **Estado**: `[x]` archivado (2026-11-04) — `openspec/changes/archive/2026-11-04-c-01-foundation-setup/`
 - **Scope**: Scaffolding del repositorio con la estructura EXACTA que dicta la consigna
   - Estructura de directorios: `app/` (`main.py`, `core/`, `modules/`), `test/`, `reiniciar.py` (placeholder), `requirements.txt`, `env.example`, `.gitignore` que excluye `.env`
   - `requirements.txt`: Python 3.12 + `fastapi[standard]>=0.111` (uvicorn incluido) + `sqlmodel>=0.0.24` + `sqlalchemy[asyncio]>=2.0` + `asyncpg>=0.30` + `python-dotenv>=1.0`
@@ -135,7 +135,7 @@ reviewes cruzadas de los CA de la consigna mientras A avanza por el camino crít
 ---
 
 ### [C-02] `database-lifespan-health`
-- **Estado**: `[ ]` pendiente
+- **Estado**: `[x]` archivado (2026-11-04) — `openspec/changes/archive/2026-11-04-c-02-database-lifespan-health/`
 - **Scope**: Ciclo de vida de la base + inyección de sesión + salud del servicio
   - `app/core/database.py`: fábrica de `create_async_engine` y `async_sessionmaker` con `expire_on_commit=False` (US-101 CA-2)
   - `app/main.py`: `lifespan` crea motor + sessionmaker en `app.state`, registra routers de la app y cierra el motor con `engine.dispose()` al apagar (US-101 CA-1)
