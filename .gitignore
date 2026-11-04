@@ -1,0 +1,23 @@
+# Secretos locales — NUNCA versionar (env.example queda versionado; patrón exacto, no *.example)
+.env
+
+# Python
+__pycache__/
+*.pyc
+
+# Entornos virtuales
+.venv/
+venv/
+
+# Artefactos de pytest/cache
+.pytest_cache/
+.coverage
+
+# Tooling local del agente / fundación (no forma parte de la entrega)
+.atl/
+.active-orchestrator-state.json
+.opencode/
+
+# Logs y temporales locales
+*.log
+*.tmp
