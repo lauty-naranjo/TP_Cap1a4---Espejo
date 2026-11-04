@@ -197,7 +197,7 @@ reviewes cruzadas de los CA de la consigna mientras A avanza por el camino crít
 > módulos son independientes en código: la integridad la garantiza la base, no el ORM (DD-04).
 
 ### [C-05] `duenios-crud-ficha`
-- **Estado**: `[ ]` pendiente
+- **Estado**: `[x]` archivado (2026-11-04) — `openspec/changes/archive/2026-11-04-c-05-duenios-crud-ficha/`
 - **Scope**: Módulo `duenios` completo (dueño + ficha 1:1) con el patrón IntegrityError → 409
   - `app/modules/duenios/{models,schemas,service,router}.py`: modelos ya en C-03; DTOs separados `DuenioCreate` (sin `id`), `DuenioUpdate`, `FichaCreate`, `DuenioRead`, `FichaRead` (RN-HTTP-02)
   - `POST /duenios/` → 201 + `DuenioRead`; email repetido → 409 atrapando `IntegrityError` del INSERT (cero consulta previa "¿ya existe?", RN-01/RN-INT-01); cuerpo inválido → 422 (US-201)
