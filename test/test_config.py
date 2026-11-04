@@ -2,6 +2,7 @@
 # Se usa subprocess: el fail-fast vive en el arranque del proceso ("el proceso de la aplicación
 # se inicia"), así aislamos el entorno y el .env real de cada escenario.
 import os
+import shutil
 import subprocess
 import sys
 
@@ -86,3 +87,78 @@ def test_variable_del_entorno_sin_env(tmp_path):
     )
     assert resultado.returncode == 0, resultado.stderr
     assert resultado.stdout.strip() == URL_CONTENIDA_ENV
+
+
+# --- Requisito: env.example sin secretos y .env fuera del versionado -------------
+# Tests de caracterización del estado ya implementado en C-01 (no hay comportamiento
+# nuevo que diseñar): fallan si alguien mete un secreto en `env.example` o destraba
+# el `.env` del `.gitignore`.
+
+
+def _entradas_de_env_example():
+    """Pares clave/valor declarados en `env.example` (ignora comentarios y líneas vacías)."""
+    ruta = os.path.join(REPO_ROOT, "env.example")
+    entradas = {}
+    with open(ruta, encoding="utf-8") as archivo:
+        for linea in archivo:
+            linea = linea.strip()
+            if not linea or linea.startswith("#"):
+                continue
+            clave, _, valor = linea.partition("=")
+            entradas[clave.strip()] = valor.strip()
+    return entradas
+
+
+def test_env_example_muestra_la_forma_sin_secretos():
+    """Escenario: env.example muestra la forma sin secretos."""
+    entradas = _entradas_de_env_example()
+
+    assert list(entradas) == ["DATABASE_URL"], f"env.example solo declara DATABASE_URL: {entradas}"
+    assert entradas["DATABASE_URL"] == URL_CONTENIDA_ENV
+
+    # La URL declarada es la forma con placeholders, no una credencial de trabajo.
+    url = entradas["DATABASE_URL"]
+    esquema, _, resto = url.partition("://")
+    credenciales, _, destino = resto.rpartition("@")
+    usuario, _, password = credenciales.partition(":")
+
+    assert esquema == "postgresql+asyncpg"
+    assert (usuario, password) == ("usuario", "password")
+    assert destino == "localhost:5432/veterinaria"
+
+
+def test_env_queda_fuera_del_versionado():
+    """Escenario: .env nunca entra al repositorio."""
+    git = shutil.which("git")
+    if git is None:
+        pytest.skip("git no disponible: no se puede verificar el versionado")
+
+    def check_ignore(ruta):
+        return subprocess.run(
+            [git, "check-ignore", "-v", ruta],
+            cwd=REPO_ROOT,
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+            errors="replace",
+            timeout=60,
+        )
+
+    ignorado = check_ignore(".env")
+    assert ignorado.returncode == 0, "`.env` debe estar excluido por el .gitignore"
+    assert ".gitignore" in ignorado.stdout, f"la exclusión debe venir del .gitignore: {ignorado.stdout}"
+
+    # `env.example` es la contracara: tiene que poder versionarse.
+    assert check_ignore("env.example").returncode != 0, "`env.example` no debe estar ignorado"
+
+    # Y el `.env` real no puede estar trackeado (caso borde: alguien lo agregó a mano).
+    trackeado = subprocess.run(
+        [git, "ls-files", "--error-unmatch", ".env"],
+        cwd=REPO_ROOT,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        errors="replace",
+        timeout=60,
+    )
+    assert trackeado.returncode != 0, "`.env` está trackeado en git: se filtraron credenciales"
