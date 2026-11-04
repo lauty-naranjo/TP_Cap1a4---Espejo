@@ -1,0 +1,7 @@
+# Stack dictado por la consigna (DD-01) — sin lockfile (SU-07: único requirements.txt).
+# Versión de Python: 3.12 (dictada; no es un paquete).
+fastapi[standard]>=0.111
+sqlmodel>=0.0.24
+sqlalchemy[asyncio]>=2.0
+asyncpg>=0.30
+python-dotenv>=1.0
