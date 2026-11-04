@@ -175,7 +175,7 @@ reviewes cruzadas de los CA de la consigna mientras A avanza por el camino crít
 ---
 
 ### [C-04] `reiniciar-seed`
-- **Estado**: `[ ]` pendiente
+- **Estado**: `[x]` archivado (2026-11-04) — `openspec/changes/archive/2026-11-04-c-04-reiniciar-seed/`
 - **Scope**: Script de reinicio con seed conocido — condición para que el TP se corrija
   - `reiniciar.py` en raíz: borra las tablas (drop con orden inverso de dependencias), las crea con `SQLModel.metadata.create_all` y carga el seed (US-302 CA-1)
   - Seed mínimo obligatorio: **2 dueños** (uno con ficha), **3 mascotas**, **4 prácticas**, **1 turno con 2 prácticas** (US-302 CA-2; seed de `04_modelo_de_datos.md`)
