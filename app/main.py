@@ -8,7 +8,16 @@ from fastapi import FastAPI
 
 from app.core import config  # noqa: F401 — importa con validación fail-fast de DATABASE_URL
 from app.core.database import create_engine, create_sessionmaker
+from app.modules.duenios.router import router as duenios_router
 from app.modules.health.router import router as health_router
+
+# Importar TODOS los modelos para poblar el registry de SQLModel antes de configurar los mappers:
+# las relaciones entre módulos se referencian por nombre (string), y sin este import el primer uso
+# falla con "InvalidRequestError: failed to locate a name ('Turno')".
+import app.modules.duenios.models  # noqa: F401
+import app.modules.mascotas.models  # noqa: F401
+import app.modules.practicas.models  # noqa: F401
+import app.modules.turnos.models  # noqa: F401
 
 
 @asynccontextmanager
@@ -20,6 +29,7 @@ async def lifespan(app: FastAPI):
     app.state.engine = engine
     app.state.sessionmaker = sessionmaker
     app.include_router(health_router)
+    app.include_router(duenios_router)
     yield
     await engine.dispose()
 

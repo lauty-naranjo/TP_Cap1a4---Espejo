@@ -47,8 +47,11 @@ def test_lifespan_cierra_el_motor_al_salir_del_contexto():
 
 
 def test_lifespan_registra_routers_en_startup():
-    """US-101 CA-1 / diseño D3: el lifespan registra los routers de la app (health) al arrancar."""
+    """US-101 CA-1 / diseño D3: el lifespan registra los routers de la app (health y, desde C-05,
+    duenios) al arrancar. Verifica health sin atarse al conteo total (crece con cada change)."""
+    from app.modules.health.router import router as health_router
+
     with patch.object(app, "include_router") as mock_include_router:
         with TestClient(app) as client:
             pass
-        mock_include_router.assert_called_once()
+        mock_include_router.assert_any_call(health_router)
