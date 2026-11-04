@@ -155,7 +155,7 @@ reviewes cruzadas de los CA de la consigna mientras A avanza por el camino crít
 ## FASE 1 — Modelos, restricciones y estado reproducible (Épica 3 · Ejercicio 3 — 30 %)
 
 ### [C-03] `domain-models`
-- **Estado**: `[ ]` pendiente
+- **Estado**: `[x]` archivado (2026-11-04) — `openspec/changes/archive/2026-11-04-c-03-domain-models/`
 - **Scope**: Los 6 modelos de tabla con TODAS las restricciones — base de integridad de todo el TP
   - Modelos: `Duenio` (tabla `duenio`), `FichaDuenio` (tabla `ficha_duenio`, **vive en el módulo `duenios`**), `Mascota` (`mascota`), `Practica` (`practica`), `Turno` (`turno`), `TurnoPractica` (tabla `turno_practica`, **vive en el módulo `turnos`**) — nombres de tablas/columnas obligatorios (SU-02): no quitar ni renombrar
   - Constraints: UNIQUE `duenio.email`, UNIQUE `ficha_duenio.duenio_id` (garantiza el 1:1), UNIQUE `practica.nombre`; CHECK `practica.precio > 0`, CHECK `turno.total >= 0`, CHECK `turno_practica.precio_unitario > 0`; FK `mascota.duenio_id` **ON DELETE RESTRICT**, FK `turno_practica.turno_id` **ON DELETE CASCADE**; PK compuesta `(turno_id, practica_id)`
