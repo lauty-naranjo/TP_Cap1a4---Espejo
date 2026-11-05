@@ -324,7 +324,7 @@ reviewes cruzadas de los CA de la consigna mientras A avanza por el camino crít
 ---
 
 ### [C-11] `delivery-readme`
-- **Estado**: `[ ]` pendiente
+- **Estado**: `[x]` archivado (2026-11-05) — `openspec/changes/archive/2026-11-05-c-11-delivery-readme/`
 - **Scope**: Formato de entrega obligatorio — sin esto el TP **no se corrige**
   - Repositorio completo con código fuente, `requirements.txt`, `env.example`, `reiniciar.py` y carpeta `test/`; `.env` **no versionado** y **cero credenciales reales** en el repo (US-801 CA-1)
   - `README.md` con los pasos desde cero: entorno virtual → dependencias → `.env` → `python reiniciar.py` → arranque del servidor con `uvicorn` (US-801 CA-2)
