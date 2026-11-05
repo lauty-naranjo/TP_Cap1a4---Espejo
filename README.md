@@ -1,5 +1,12 @@
 # API Veterinaria — TP Programación III (Capítulos 1 a 4)
 
+## Grupo
+
+- **Nombre del grupo:** ZorionTech
+- **Integrantes:**
+  - Ramiro Naranjo
+  - Martín Escudero
+
 ## Descripción
 
 API REST para gestionar dueños, mascotas, prácticas y turnos de una veterinaria. Cubre los ejercicios
